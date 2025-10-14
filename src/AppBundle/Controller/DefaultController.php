@@ -48,17 +48,24 @@ class DefaultController extends Controller
 
 		// $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
 		$diff = $date2 - $date1;
-		$weeks_since = ($diff / (60 * 60 * 24 * 7));
-		if ($weeks_since >= 0 && $weeks_since < count($cards)) {
-			$card = $cards[$weeks_since];
-			if (!$card->getMeta()) {
-				$card = $cards[$weeks_since - 1];
+		$weeks_since = floor($diff / (60 * 60 * 24 * 7));
+		// Wrap around if we've run out of heroes
+		if (count($cards) > 0) {
+			$index = $weeks_since % count($cards);
+			$card = $cards[$index];
+			// Find a card with meta data
+			$attempts = 0;
+			while (!$card->getMeta() && $attempts < count($cards)) {
+				$index = ($index + 1) % count($cards);
+				$card = $cards[$index];
+				$attempts++;
 			}
-			if (!$card->getMeta()) {
-				$card = $cards[$weeks_since - 2];
+			// Fallback to first card if none have meta
+			if (!$card->getMeta() && count($cards) > 0) {
+				$card = $cards[0];
 			}
 		} else {
-			throw new \Exception("Ran out of heroes for spotlight.");
+			throw new \Exception("No hero cards found.");
 		}
 
 		$paginator = $decklist_manager->findDecklistsByHero($card, true);

@@ -136,12 +136,13 @@ class SocialController extends Controller
 
 		$name = filter_var($request->request->get('name'), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$descriptionMd = trim($request->request->get('descriptionMd'));
-		if (!$descriptionMd || strlen($descriptionMd) < 10){
-			return $this->render('AppBundle:Default:error.html.twig', [
-			'pagetitle' => "Missing Description. ",
-			'error' => "Please provide at least a quick write up of your deck or ask what you need help with. If you just want to share decks, you can do show by enabling sharing in your options and then share the regular deck link.",
-			]);
-		}
+		// Description validation disabled for local development
+		// if (!$descriptionMd || strlen($descriptionMd) < 10){
+		// 	return $this->render('AppBundle:Default:error.html.twig', [
+		// 	'pagetitle' => "Missing Description. ",
+		// 	'error' => "Please provide at least a quick write up of your deck or ask what you need help with. If you just want to share decks, you can do show by enabling sharing in your options and then share the regular deck link.",
+		// 	]);
+		// }
 		// $tournament_id = filter_var($request->request->get('tournament'), FILTER_SANITIZE_NUMBER_INT);
 		// $tournament = $em->getRepository('AppBundle:Tournament')->find($tournament_id);
 
