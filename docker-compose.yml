@@ -14,6 +14,26 @@ services:
     volumes:
       - marvelsdb-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - marvelsdb-network
+
+  web:
+    build: .
+    container_name: marvelsdb-web
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - marvelsdb-network
+    environment:
+      - PHP_IDE_CONFIG=serverName=marvelsdb
 
 volumes:
   marvelsdb-data:
+
+networks:
+  marvelsdb-network:
+    driver: bridge
