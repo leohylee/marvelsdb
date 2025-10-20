@@ -367,7 +367,7 @@ class ApiController extends Controller
 			$cards = array();
 			/* @var $card \AppBundle\Entity\Card */
 			foreach($list_cards as $card) {
-				$cards[] = $this->get('cards_data')->getCardInfo($card, true, "en");
+				$cards[] = $this->get('cards_data')->getCardInfo($card, true);
 			}
 
 			$content = json_encode($cards);
