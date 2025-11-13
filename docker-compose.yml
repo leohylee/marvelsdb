@@ -24,6 +24,7 @@ services:
       - "8000:80"
     volumes:
       - .:/var/www/html
+      - ../marvelsdb-json-data:/var/www/marvelsdb-json-data
     depends_on:
       - db
     networks:
