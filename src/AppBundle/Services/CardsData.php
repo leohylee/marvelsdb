@@ -521,8 +521,6 @@ class CardsData
 		} else {
 			$cardinfo['url'] = $this->router->generate('cards_zoom', array('card_code' => $card->getCode()), UrlGeneratorInterface::ABSOLUTE_URL);
 		}
-		// Force HTTP and add port for local development
-		$cardinfo['url'] = str_replace('https://localhost/', 'http://localhost:8000/', $cardinfo['url']);
 		$imageurl = $this->assets_helper->getUrl('bundles/cards/'.$card->getCode().'.png');
 		$imagepath= $this->rootDir . '/../web' . preg_replace('/\?.*/', '', $imageurl);
 		if(file_exists($imagepath)) {

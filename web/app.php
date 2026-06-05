@@ -25,6 +25,17 @@ $kernel->loadClassCache();
 // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
 //Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
+
+// In production the app runs behind the Caddy reverse proxy (TLS terminates at
+// Caddy; the container is reached over plain HTTP on 127.0.0.1:8000). Trust the
+// immediate proxy so Symfony honours X-Forwarded-Proto/Port and generates
+// https:// absolute URLs without leaking the internal :8000 port. Harmless in
+// local dev where no X-Forwarded-* headers are present.
+Request::setTrustedProxies(
+    array('127.0.0.1', $request->server->get('REMOTE_ADDR')),
+    Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_PORT
+);
+
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
